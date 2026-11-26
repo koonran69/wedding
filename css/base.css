@@ -106,7 +106,7 @@ canvas {
 .ornament {
     width: min(300px, 85vw);
     height: 55px;
-    background: url("/images/prnament.webp") center / contain no-repeat;
+    background: url("../images/prnament.webp") center / contain no-repeat;
     opacity: 1;
 }
 
