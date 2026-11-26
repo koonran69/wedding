@@ -1,0 +1,193 @@
+/* ========================================
+   GIFT SECTION
+======================================== */
+
+.gift-section {
+    --gift-open-space: 0px;
+    position: relative;
+    padding-top: calc(3.5rem + var(--gift-open-space));
+    transition: padding-top 0.8s ease;
+}
+.gift-section { color: var(--ink); }
+.pack-pocket, .pack-flap, .pack-letter { transition-timing-function: cubic-bezier(.22,1,.36,1); }
+
+
+/* Mobile */
+.gift-section.is-pack-open {
+    --gift-open-space: 230px;
+}
+
+
+/* Desktop */
+@media (min-width: 640px) {
+    .gift-section {
+        padding-top: calc(6rem + var(--gift-open-space));
+    }
+
+    .gift-section.is-pack-open {
+        --gift-open-space: 250px;
+    }
+}
+
+
+/* ========================================
+   RED ENVELOPE
+======================================== */
+
+.red-pack {
+    perspective: 1200px;
+    width: min(100%, 400px);
+    height: 260px;
+    margin: 0 auto;
+    position: relative;
+
+    /*
+     * Cho phép letter trồi ra ngoài envelope.
+     */
+    overflow: visible;
+}
+
+.red-pack-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+
+/* Nền phong bao khi đóng */
+.red-pack:not(.is-open) .red-pack-inner {
+    background: linear-gradient(
+            160deg,
+            #b23b3b,
+            #7a1f28 70%
+    );
+
+    border-radius: 0 0 1.25rem 1.25rem;
+}
+
+
+/* ========================================
+   ENVELOPE PARTS
+======================================== */
+
+.pack-pocket,
+.pack-flap,
+.pack-letter {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+
+/* Pocket */
+
+.pack-pocket {
+    top: 64px;
+    height: 196px;
+
+    background: linear-gradient(
+            160deg,
+            #b23b3b,
+            #7a1f28 70%
+    );
+
+    border-radius: 0 0 1.25rem 1.25rem;
+
+    box-shadow:
+            0 25px 40px -20px rgba(90, 20, 24, 0.55);
+
+    z-index: 2;
+
+    overflow: hidden;
+}
+
+.pack-pocket::after {
+    content: "囍";
+
+    position: absolute;
+    inset: 0;
+
+    display: grid;
+    place-items: center;
+
+    font-size: clamp(3rem, 16vw, 5rem);
+
+    color: rgba(255, 214, 140, 0.22);
+
+    font-family: "Playfair Display", serif;
+}
+
+
+/* Flap */
+
+.pack-flap {
+    top: 0;
+    height: 84px;
+
+    z-index: 4;
+
+    clip-path: polygon(
+            0 0,
+            100% 0,
+            50% 100%
+    );
+
+    background: linear-gradient(
+            180deg,
+            #d45a5a,
+            #8d242c
+    );
+
+    transform-origin: top center;
+
+    backface-visibility: hidden;
+}
+
+
+/* Letter */
+
+.pack-letter {
+    top: 20px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 90%;
+    max-width: 360px;
+
+    height: 220px;
+
+    background: var(--cream);
+
+    border-radius: 1rem;
+
+    box-shadow:
+            0 10px 30px rgba(58, 47, 40, 0.15);
+
+    padding: 1rem;
+
+    /*
+     * Khi đóng nằm dưới envelope.
+     */
+    z-index: 1;
+
+    transition: none;
+}
+
+
+/*
+ * Khi mở:
+ * letter nằm trên envelope.
+ */
+.red-pack.is-open .pack-letter {
+    z-index: 30;
+}
+
+
+/*
+ * Không thay đổi height của envelope.
+ */
+.red-pack.is-open {
+    height: 260px;
+}

@@ -1,0 +1,5 @@
+#timeline-progress {
+    transform: scaleY(0);
+}
+#roadmap { color: var(--ink); }
+#roadmap #timeline { font-size: 1.05rem; line-height: 1.75; }

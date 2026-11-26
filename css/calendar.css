@@ -1,0 +1,66 @@
+.cal-cell {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(1.2rem, 3.1vw, 1.4rem);
+    color: var(--ink-soft);
+}
+
+.cal-heart {
+    position: relative;
+    width: clamp(1.65rem, 8vw, 2.55rem);
+    height: clamp(1.65rem, 8vw, 2.55rem);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 600;
+}
+
+.cal-heart::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: radial-gradient(circle at 35% 30%, #e8b4b4, #c47a7a 62%, #a85d5d);
+    box-shadow: 0 8px 20px rgba(168, 93, 93, 0.35);
+    animation: heartPulse 1.6s ease-in-out infinite;
+    will-change: transform;
+}
+
+.cal-heart span {
+    position: relative;
+    z-index: 1;
+}
+
+.cal-ring {
+    position: absolute;
+    inset: -5px;
+    border-radius: 999px;
+    border: 1px solid rgba(196, 165, 116, 0.7);
+    animation: ringSpin 8s linear infinite;
+}
+
+@keyframes heartPulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes ringSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-heart::before,
+    .cal-ring {
+        animation: none !important;
+    }
+}

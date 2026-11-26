@@ -1,0 +1,227 @@
+:root {
+    --cream: #FAF7F2;
+    --ivory: #F3EDE2;
+    --blush: #E8D5CE;
+    --rose: #B88E80;
+    --gold: #9a7132;
+    --gold-deep: #9E7C3E;
+    --ink: #2B211C;
+    --ink-soft: #635248;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: auto;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+body {
+    background: var(--cream);
+    color: var(--ink);
+    overflow: hidden;
+    /*overflow-x: hidden;*/
+    max-width: 100%;
+    min-height: 100dvh;
+}
+
+body.is-open {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#invitation, #invitation footer {
+    font-family: "Be Vietnam Pro", "Outfit", sans-serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+}
+#invitation p, #invitation li, #invitation address { color: var(--ink-soft); }
+#invitation h1, #invitation h2, #invitation h3, #invitation strong { color: var(--ink); }
+#invitation .font-serif { font-family: "Cormorant Garamond", "Be Vietnam Pro", serif; font-size: 1.18em; line-height: 1.65; }
+#invitation .text-xs { font-size: 1rem; }
+#invitation .text-sm { font-size: 1rem; }
+#invitation .text-base { font-size: 1.08rem; }
+#invitation .text-gold { color: var(--gold); }
+
+img,
+video,
+iframe,
+canvas {
+    max-width: 100%;
+}
+
+.grain::before {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+.script-hero {
+    font-family: "Great Vibes", cursive;
+    font-size: clamp(2.5rem, 12vw, 5.5rem);
+    line-height: 1.15;
+    font-weight: 400;
+}
+
+.script-section {
+    font-family: "Great Vibes", cursive;
+    font-size: clamp(2.3rem, 9vw, 4rem);
+    line-height: 1.15;
+}
+
+.script-name {
+    font-family: "Great Vibes", cursive;
+    font-size: clamp(2rem, 7.5vw, 3.25rem);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.kicker {
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.gold-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.ornament {
+    width: min(300px, 85vw);
+    height: 55px;
+    background: url("/images/prnament.webp") center / contain no-repeat;
+    opacity: 1;
+}
+
+.script-shadow {
+    text-shadow: 0 10px 30px rgba(197, 160, 89, 0.2);
+}
+
+.invite-frame {
+    background:
+            linear-gradient(var(--cream), var(--cream)) padding-box,
+            linear-gradient(135deg, #EAD4B5, #C5A059, #F5EBE1, #9E7C3E) border-box;
+    border: 1px solid transparent;
+    box-shadow:
+            0 25px 60px -30px rgba(43, 33, 28, 0.3),
+            inset 0 0 60px rgba(197, 160, 89, 0.06);
+}
+
+.invite-glass {
+    -webkit-backdrop-filter: blur(8px) saturate(1.1);
+    backdrop-filter: blur(8px) saturate(1.1);
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    border-radius: 1.5rem;
+    box-shadow:
+            0 20px 45px -20px rgba(43, 33, 28, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.reveal-line {
+    opacity: 0;
+    transform: translateY(18px);
+}
+
+.sound-btn {
+    backdrop-filter: blur(12px);
+    background: rgba(250, 247, 242, 0.85);
+    border: 1px solid rgba(197, 160, 89, 0.4);
+    min-width: 48px;
+    min-height: 48px;
+}
+
+.btn-gold {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #D4B375, #B08844);
+    color: #FFFFFF;
+    min-height: 52px;
+    touch-action: manipulation;
+    box-shadow:
+            0 10px 25px -10px rgba(176, 136, 68, 0.7),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s;
+}
+
+.btn-gold::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.4), transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.7s;
+}
+
+@media (hover: hover) {
+    .btn-gold:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 15px 30px -10px rgba(176, 136, 68, 0.85);
+    }
+    .btn-gold:hover::after {
+        transform: translateX(120%);
+    }
+}
+
+.nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(197, 160, 89, 0.35);
+    transition: all 0.3s;
+}
+
+.nav-dot.is-active {
+    height: 24px;
+    background: var(--gold);
+}
+
+.touch-nav {
+    min-width: 48px;
+    min-height: 48px;
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: rgba(25, 18, 14, 0.88);
+    display: none;
+    place-items: center;
+    padding: 1rem;
+}
+
+.lightbox.is-on {
+    display: grid;
+}
+
+@media (min-width: 640px) {
+    #invitation, #invitation footer { font-size: 1.08rem; line-height: 1.85; }
+    .kicker {
+        letter-spacing: 0.38em;
+        font-size: 15px
+    }
+    .invite-glass {
+        border-radius: 1.75rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-gold::after {
+        animation: none !important;
+    }
+}

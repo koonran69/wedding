@@ -1,0 +1,4 @@
+#details { color: var(--ink); }
+#details .slide-card {
+    transition: transform 0.3s ease;
+}

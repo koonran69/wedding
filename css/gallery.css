@@ -1,0 +1,37 @@
+.coverflow {
+    perspective: 1200px;
+    height: 250px;
+}
+.coverflow-item { transition: filter .45s ease, box-shadow .45s ease; }
+
+.coverflow-item {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: min(78vw, 360px);
+    height: 210px;
+    border-radius: 1.1rem;
+    overflow: hidden;
+    box-shadow: 0 18px 40px -18px rgba(58, 47, 40, 0.45);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    background: #ddd;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.coverflow-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+@media (min-width: 640px) {
+    .coverflow {
+        height: 360px;
+    }
+    .coverflow-item {
+        height: 300px;
+        width: min(70vw, 420px);
+    }
+}

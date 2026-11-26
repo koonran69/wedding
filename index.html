@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <title>Hữu Thế & Đài Trang — Thiệp cưới</title>
+    <meta name="description"
+          content="Trân trọng kính mời Quý vị đến dự lễ thành hôn của Ngô Hữu Thế & Nguyễn Phạm Đài Trang"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Outfit:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+            rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: "#FBF7F2",
+                        ivory: "#F4ECE3",
+                        blush: "#EAD4CC",
+                        rose: "#C9A194",
+                        gold: "#C4A574",
+                        ink: "#3A2F28",
+                        "ink-soft": "#6B5C52",
+                    },
+                    fontFamily: {
+                        serif: ["Cormorant Garamond", "serif"],
+                        script: ["Great Vibes", "cursive"],
+                        display: ["Playfair Display", "serif"],
+                        sans: ["Outfit", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="css/base.css"/>
+    <link rel="stylesheet" href="css/calendar.css"/>
+    <link rel="stylesheet" href="css/details.css"/>
+    <link rel="stylesheet" href="css/gallery.css"/>
+    <link rel="stylesheet" href="css/gift.css"/>
+    <link rel="stylesheet" href="css/landing.css"/>
+    <link rel="stylesheet" href="css/map.css"/>
+    <link rel="stylesheet" href="css/opening.css"/>
+    <link rel="stylesheet" href="css/roadmap.css"/>
+
+    <style>
+        body { visibility: hidden; }
+        /* Khi trang đã load xong (JS hoặc class kích hoạt), hiện body mượt mà */
+        body.loaded { visibility: visible; transition: opacity 0.3s ease-in; }
+    </style>
+</head>
+
+<body class="font-sans grain antialiased">
+
+<div id="loader" class="fixed inset-0 z-[100] bg-cream grid place-items-center px-3">
+    <div class="text-center">
+        <p class="font-script text-4xl text-ink script-shadow">Hữu Thế <span class="text-gold">&</span> Đài Trang</p>
+        <div class="gold-line w-40 mx-auto mt-6"></div>
+        <p class="mt-4 tracking-[0.35em] uppercase text-xs text-gold">Thiệp đang được gửi đến</p>
+    </div>
+</div>
+
+<button
+        id="sound-btn"
+        class="sound-btn pointer-events-none opacity-0 fixed top-4 right-4 z-[70] w-12 h-12 rounded-full grid place-items-center text-ink"
+        aria-label="Bật tắt nhạc"
+>
+    <i data-lucide="volume-x" class="w-5 h-5"></i>
+</button>
+
+<audio id="bg-music" loop preload="none"></audio>
+
+<section id="landing" class="fixed inset-0 z-40 overflow-hidden flex items-center justify-center px-4">
+    <canvas class="cupid-scene-canvas absolute inset-0" aria-hidden="true"></canvas>
+    <!-- Canvas 3D nền nghệ thuật -->
+    <canvas id="scene-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+
+    <div class="landing-ui relative z-10 flex items-center justify-center w-full px-4 py-20">
+        <!-- Wrapper chính -->
+        <div id="envelope-box" class="envelope-box relative w-full max-w-[22.5rem] sm:max-w-[28rem]">
+
+            <!-- Tấm thiệp mời (Nằm ở lớp dưới bên trong phong bì khi đóng) -->
+            <div id="flying-card" class="absolute inset-0 z-10 grid place-items-center pointer-events-none opacity-0">
+                <div class="invite-frame invite-glass w-full max-w-md sm:max-w-lg p-5 sm:p-8 text-center bg-cream/98 shadow-2xl rounded-[1.75rem] max-h-[92dvh] overflow-y-auto">
+                    <p class="kicker text-[10px] sm:text-xs">The Wedding Invitation</p>
+                    <h2 class="script-section text-2xl sm:text-3xl mt-1 text-ink">Lễ Thành Hôn</h2>
+                    <div class="ornament mx-auto my-2.5"></div>
+
+                    <p class="font-serif italic text-xs sm:text-sm text-ink-soft mb-4 px-1">
+                        Trân trọng kính mời Quý vị đến chung vui cùng gia đình chúng tôi.
+                    </p>
+
+                    <div class="space-y-4 text-center font-serif">
+                        <!-- Song thân hai họ -->
+                        <div class="grid grid-cols-2 gap-3 text-xs sm:text-sm border-b border-gold/20 pb-4">
+                            <div class="pr-2 border-r border-gold/20">
+                                <p class="kicker text-[9px] text-gold mb-1">Nhà Trai</p>
+                                <div id="flying-groom-parents" class="text-ink-soft space-y-0.5 text-[11px] sm:text-xs"></div>
+                            </div>
+                            <div class="pl-2">
+                                <p class="kicker text-[9px] text-gold mb-1">Nhà Gái</p>
+                                <div id="flying-bride-parents" class="text-ink-soft space-y-0.5 text-[11px] sm:text-xs"></div>
+                            </div>
+                        </div>
+
+                        <!-- Cô dâu & Chú rể -->
+                        <div class="py-1">
+                            <div class="script-name text-2xl sm:text-3xl text-ink leading-tight" data-groom-full></div>
+                            <p class="font-serif text-gold italic text-xs my-0.5">&</p>
+                            <div class="script-name text-2xl sm:text-3xl text-ink leading-tight" data-bride-full></div>
+                        </div>
+
+                        <!-- Thông tin lễ & tiệc -->
+                        <div class="bg-ivory/80 rounded-xl p-3.5 sm:p-4 border border-gold/20 text-left space-y-3 text-xs sm:text-sm">
+                            <div>
+                                <p class="text-gold font-semibold uppercase tracking-wider text-[10px]">
+                                    💍 Lễ Thành Hôn · <span id="flying-ceremony-time"></span>
+                                </p>
+                                <p id="flying-ceremony-name" class="font-display text-sm sm:text-base font-medium text-ink mt-0.5"></p>
+                                <p id="flying-ceremony-address" class="text-ink-soft text-[11px] mt-0.5 leading-tight"></p>
+                            </div>
+                            <div class="border-t border-gold/15 pt-2.5">
+                                <p class="text-gold font-semibold uppercase tracking-wider text-[10px]">
+                                    🥂 Tiệc Mừng · <span id="flying-reception-time"></span>
+                                </p>
+                                <p id="flying-reception-name" class="font-display text-sm sm:text-base font-medium text-ink mt-0.5"></p>
+                                <p id="flying-reception-address" class="text-ink-soft text-[11px] mt-0.5 leading-tight"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vỏ phong bì chính bên ngoài (Nằm đè lên trên thiệp khi đóng) -->
+            <div class="landing-card invite-glass relative z-20 w-full px-5 py-8 sm:px-10 sm:py-12 text-center shadow-2xl">
+                <p class="kicker mb-3">The Wedding Invitation</p>
+                <h1 class="script-hero text-ink script-shadow">
+                    <span class="text-gold" data-groom-short>Hữu Thế</span>
+                    <span class="text-gold mx-1">&</span>
+                    <span class="text-gold" data-bride-short>Đài Trang</span>
+                </h1>
+                <div class="ornament mx-auto my-4 sm:my-5"></div>
+                <p class="font-serif font-bold italic text-[20px] text-gold leading-snug px-1" data-date-long></p>
+                <button
+                        id="open-btn"
+                        class="btn-gold w-full mt-7 sm:mt-9 px-6 rounded-full font-serif text-lg sm:text-xl tracking-wide cursor-pointer shadow-lg hover:scale-[1.02] transition-transform"
+                >
+                    Mở Thiệp Mời
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<nav class="hidden flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3" aria-label="Mục lục">
+    <a class="nav-dot is-active" href="#opening" title="Lời ngỏ"></a>
+    <a class="nav-dot" href="#details" title="Thông tin lễ"></a>
+    <a class="nav-dot" href="#calendar" title="Lịch"></a>
+    <a class="nav-dot" href="#map" title="Bản đồ"></a>
+    <a class="nav-dot" href="#roadmap" title="Timeline"></a>
+    <a class="nav-dot" href="#gallery" title="Album"></a>
+    <a class="nav-dot" href="#gift" title="Mừng cưới"></a>
+</nav>
+
+<main id="invitation" class="hidden relative z-10 bg-cream overflow-x-hidden">
+
+    <section id="opening" class="min-h-[100dvh] flex items-center justify-center px-4 py-16 sm:px-6 sm:py-24">
+        <div class="invite-frame max-w-3xl w-full px-5 sm:px-14 py-10 sm:py-20 text-center rounded-[1.5rem] sm:rounded-[2rem]">
+            <h2 class="reveal-line script-section mt-3 text-ink">Lời ngỏ</h2>
+            <div class="ornament mx-auto my-1"></div>
+            <div id="opening-message" class="font-serif italic !text-[19px] !sm:text-[26px] leading-relaxed space-y-5 sm:space-y-6 min-h-[7rem]">
+                <p>Hạnh phúc không phải là tìm thấy người hoàn hảo, mà là cùng một người bình thường đi hết cuộc đời.</p>
+                <p>Trân trọng kính mời Ông Bà, Cô Dì, Chú Bác, Anh Chị cùng bạn bè thân hữu đến chung vui với gia đình chúng tôi trong ngày lễ thành hôn.</p>
+            </div>
+            <p class="reveal-line mt-6 font-display !text-[19px] text-gold" data-lunar></p>
+            <p class="reveal-line mt-2 font-serif !text-[19px]" data-date-long></p>
+        </div>
+    </section>
+
+    <section id="details" class="px-4 py-14 sm:px-6 sm:py-20 bg-ivory/80">
+        <div class="max-w-xl mx-auto">
+            <header class="text-center mb-8 sm:mb-14">
+                <h2 class="reveal-line script-section mt-3">Thông tin lễ cưới</h2>
+                <div class="ornament mx-auto mt-1"></div>
+            </header>
+
+            <!-- Tấm thiệp chi tiết đồng bộ phong cách -->
+            <div class="invite-frame invite-glass w-full p-6 sm:p-10 text-center bg-cream/98 shadow-2xl rounded-[1.75rem]">
+                <h2 class="script-section text-2xl sm:text-3xl mt-1 text-ink">Lễ Thành Hôn</h2>
+                <div class="ornament mx-auto my-1"></div>
+
+                <p class="font-serif italic !text-[19px] mb-6 px-1">
+                    Trân trọng kính mời Quý vị đến chung vui cùng gia đình chúng tôi trong ngày trọng đại.
+                </p>
+
+                <div class="space-y-6 text-center font-serif">
+                    <!-- Song thân hai họ -->
+                    <div class="grid grid-cols-2 gap-4 text-xs sm:text-sm border-b border-gold/20 pb-5">
+                        <div class="pr-3 border-r border-gold/20 text-center">
+                            <p class="kicker text-[16px] text-gold mb-1.5 font-semibold">Nhà Trai</p>
+                            <p class="text-ink-soft text-[16px] mb-2">Trân trọng báo tin lễ cưới của con trai</p>
+                            <div id="groom-parents" class="text-ink font-serif space-y-1 !text-[16px]"></div>
+                        </div>
+                        <div class="pl-3 text-center">
+                            <p class="kicker text-[16px] text-gold mb-1.5 font-semibold">Nhà Gái</p>
+                            <p class="text-ink-soft text-[16px] mb-2">Trân trọng báo tin lễ cưới của con gái</p>
+                            <div id="bride-parents" class="text-ink font-serif space-y-1 !text-[16px]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Cô dâu & Chú rể -->
+                    <div class="py-2">
+                        <p class="text-[12px] tracking-[0.25em] font-bold uppercase text-gold mb-1">Chú rể</p>
+                        <div class="script-name text-3xl sm:text-4xl text-ink leading-tight" data-groom-full></div>
+
+                        <p class="font-serif text-gold italic font-bold text-sm my-1">&</p>
+
+                        <p class="text-[12px] tracking-[0.25em] font-bold uppercase text-gold mb-1">Cô dâu</p>
+                        <div class="script-name text-3xl sm:text-4xl text-ink leading-tight" data-bride-full></div>
+                    </div>
+
+                    <!-- Thông tin lễ & tiệc -->
+                    <div class="bg-ivory/80 rounded-xl p-4 sm:p-6 border border-gold/20 text-left space-y-4 text-xs sm:text-sm">
+                        <div>
+                            <p class="text-gold font-semibold uppercase tracking-wider text-xs">
+                                💍 Lễ Thành Hôn · <span id="ceremony-time"></span>
+                            </p>
+                            <p id="ceremony-name" class="font-display text-base sm:text-lg font-medium text-ink mt-1"></p>
+                            <p id="ceremony-address" class="text-ink-soft !text-[18px] mt-0.5 leading-relaxed"></p>
+                        </div>
+                        <div class="border-t border-gold/15 pt-3.5">
+                            <p class="text-gold font-semibold uppercase tracking-wider text-xs">
+                                🥂 Tiệc Mừng · <span id="reception-time"></span>
+                            </p>
+                            <p id="reception-name" class="font-display text-base sm:text-lg font-medium text-ink mt-1"></p>
+                            <p id="reception-address" class="text-ink-soft !text-[18px] mt-0.5 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="calendar" class="px-4 py-14 sm:px-6 sm:py-24">
+        <div class="max-w-xl mx-auto text-center">
+            <h2 class="reveal-line script-section mt-3">Tháng Mười Một</h2>
+            <p class="reveal-line font-serif text-ink-soft !text-[22px] mt-2">Năm 2026</p>
+            <div id="calendar-card" class="invite-frame rounded-[1.4rem] sm:rounded-[1.75rem] p-3 sm:p-8 mt-8">
+                <div id="calendar-grid" class="grid grid-cols-7 gap-y-2"></div>
+                <p class="mt-8 font-serif text-ink-soft">
+                    Ngày <span class="text-gold font-display">28</span> được đánh dấu — ngày chúng tôi bắt đầu hành
+                    trình mới.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="map" class="px-4 py-14 sm:px-6 sm:py-20 bg-ivory/80">
+        <div class="max-w-5xl mx-auto">
+            <header class="text-center mb-7 sm:mb-10">
+                <h2 class="reveal-line script-section mt-3">Bản đồ chỉ đường</h2>
+                <div class="ornament mx-auto mt-1"></div>
+            </header>
+            <div class="map-wrap h-[240px] sm:h-[460px]">
+                <iframe id="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Bản đồ tiệc cưới"></iframe>
+                <div class="map-pin">
+                    <svg width="36" height="48" viewBox="0 0 36 48" fill="none">
+                        <path d="M18 46s14-16.2 14-28A14 14 0 1 0 4 18c0 11.8 14 28 14 28z" fill="#c47a7a"/>
+                        <circle cx="18" cy="17" r="6" fill="#FBF7F2"/>
+                    </svg>
+                    <div class="pin-dot mx-auto -mt-2"></div>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <p class="font-serif text-base sm:text-xl px-2" id="reception-name-repeat"></p>
+                <a
+                        id="map-dir"
+                        target="_blank"
+                        rel="noopener"
+                        class="btn-gold inline-flex items-center justify-center gap-2 mt-5 w-full sm:w-auto px-7 rounded-full font-serif text-lg"
+                >
+                    <i data-lucide="navigation" class="w-4 h-4"></i>
+                    Mở Google Maps
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="px-4 py-14 sm:px-6 sm:py-24">
+        <div class="max-w-3xl mx-auto">
+            <header class="text-center mb-10 sm:mb-16">
+                <h2 class="reveal-line script-section mt-3">Lịch trình ngày cưới</h2>
+                <div class="ornament mx-auto mt-1"></div>
+            </header>
+            <div class="relative">
+                <div class="absolute left-[12px] md:left-1/2 md:-translate-x-1/2 top-0 h-full w-px bg-gold/25 overflow-hidden"
+                     aria-hidden="true">
+                    <div id="timeline-progress" class="w-full h-full bg-gold origin-top"></div>
+                </div>
+                <div id="timeline" class="space-y-14"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="px-4 py-14 sm:px-6 sm:py-20 bg-ivory/70 overflow-hidden">
+        <header class="text-center mb-6 sm:mb-8">
+            <h2 class="reveal-line script-section mt-3">Album ảnh & video</h2>
+            <div class="ornament mx-auto mt-1"></div>
+        </header>
+        <div class="relative max-w-5xl mx-auto">
+            <div id="coverflow" class="coverflow relative"></div>
+            <div class="flex justify-center gap-4 mt-3">
+                <button id="cover-prev" class="sound-btn touch-nav rounded-full grid place-items-center"
+                        aria-label="Ảnh trước">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <button id="cover-next" class="sound-btn touch-nav rounded-full grid place-items-center"
+                        aria-label="Ảnh sau">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+        <div class="max-w-3xl mx-auto mt-16 rounded-[1.5rem] overflow-hidden shadow-[0_30px_70px_-40px_rgba(58,47,40,0.5)]">
+            <video id="wedding-video" class="w-full aspect-video bg-ink object-cover" controls playsinline
+                   preload="metadata"
+                   poster="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=80"></video>
+        </div>
+    </section>
+
+    <section id="gift" class="gift-section px-4 py-14 sm:px-6 sm:py-24">
+        <header class="text-center mb-10">
+            <h2 class="reveal-line script-section mt-3">Phong bao mừng cưới</h2>
+            <p class="reveal-line font-serif text-ink-soft mt-4 max-w-lg mx-auto !text-[18px] px-1">
+                Sự hiện diện của Quý vị là món quà quý giá nhất. Nếu gửi lời chúc qua phong bao điện tử, xin cảm ơn tấm
+                lòng ấy.
+            </p>
+        </header>
+        <div id="red-pack" class="red-pack">
+            <div class="red-pack-inner">
+                <div id="pack-flap" class="pack-flap"></div>
+                <div id="pack-letter" class="pack-letter">
+                    <div id="qr-panel"
+                         class="opacity-0 translate-y-4 grid grid-cols-2 gap-2 sm:gap-4 text-center min-w-0">
+                        <div class="min-w-0">
+                            <p class="text-[10px] tracking-[0.16em] uppercase text-gold mb-2">Nhà trai</p>
+                            <img id="qr-groom" alt="QR nhà trai" class="w-full rounded-lg bg-white p-1"/>
+                            <p id="bank-groom-name" class="mt-2 text-[10px] sm:text-xs font-medium break-all"></p>
+                            <p id="bank-groom-bank" class="text-[9px] sm:text-[10px] text-ink-soft leading-tight"></p>
+                            <p id="bank-groom-acc" class="text-[10px] sm:text-xs mt-1 tracking-wider"></p>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] tracking-[0.16em] uppercase text-gold mb-2">Nhà gái</p>
+                            <img id="qr-bride" alt="QR nhà gái" class="w-full rounded-lg bg-white p-1"/>
+                            <p id="bank-bride-name" class="mt-2 text-[10px] sm:text-xs font-medium break-all"></p>
+                            <p id="bank-bride-bank" class="text-[9px] sm:text-[10px] text-ink-soft leading-tight"></p>
+                            <p id="bank-bride-acc" class="text-[10px] sm:text-xs mt-1 tracking-wider"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pack-pocket"></div>
+            </div>
+        </div>
+        <div class="text-center mt-8">
+            <button id="open-pack-btn" class="btn-gold w-full sm:w-auto px-8 rounded-full font-serif text-lg">Mở phong bao</button>
+        </div>
+    </section>
+
+    <footer class="py-16 text-center">
+        <p class="script-section">Hẹn gặp Quý vị</p>
+        <p class="font-serif text-ink-soft mt-3">
+            <span data-groom-short></span> & <span data-bride-short></span>
+        </p>
+        <div class="ornament mx-auto mt-6"></div>
+    </footer>
+</main>
+
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true">
+    <button data-close-lightbox class="absolute top-5 right-5 text-cream" aria-label="Đóng">
+        <i data-lucide="x" class="w-7 h-7"></i>
+    </button>
+    <img id="lightbox-img" alt="Ảnh phóng to" class="max-h-[86vh] max-w-[92vw] rounded-2xl shadow-2xl object-contain"/>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lucide@0.469.0"></script>
+<script src="js/config.js"></script>
+<script src="js/landing-scene.js"></script>
+<script src="js/cupid-scene.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

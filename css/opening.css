@@ -1,0 +1,11 @@
+#opening {
+    min-height: 100dvh;
+    background: radial-gradient(circle at center, rgba(255, 245, 240, 0.6) 0%, rgba(250, 240, 235, 0.9) 100%);
+}
+#opening-message { font-size: clamp(1.18rem, 2.2vw, 1.5rem); line-height: 1.9; letter-spacing: .01em; color: var(--ink); }
+
+/* Tinh chỉnh khung viền đôi cho sang trọng và thoáng đãng */
+.invite-frame {
+    box-shadow: 0 20px 40px -15px rgba(180, 140, 100, 0.15),
+    0 0 0 1px rgba(212, 175, 55, 0.1) inset;
+}

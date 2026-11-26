@@ -1,0 +1,238 @@
+#landing {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 25%, #4a1f29 0%, #1a080d 55%, #0d0508 100%);
+    touch-action: none;
+}
+
+.cupid-scene-canvas {
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+
+    z-index: 12 !important;
+    pointer-events: none;
+    touch-action: none;
+}
+
+#scene-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+@media (pointer: coarse) {
+    #landing { touch-action: none; }
+}
+
+.envelope-box {
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+    overflow: visible;
+}
+
+.landing-card {
+    position: relative;
+    z-index: 20; /* Vỏ phong bì nằm lớp trên */
+    will-change: transform, opacity, box-shadow;
+    transition: box-shadow 0.5s ease;
+    border-radius: 1.75rem;
+    background: var(--ink);
+}
+
+/* Khung bọc tấm thiệp bên trong */
+.flying-card-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -20px; /* Nằm ẩn thụt bên trong phong bì */
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+/* Khi mở thiệp (thêm class .is-open cho envelope-box hoặc flying-card) */
+.envelope-box.is-open #flying-card {
+    z-index: 30;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+/* Hiệu ứng ẩn vỏ phong bì chính khi mở (nếu muốn vỏ mờ đi hoặc trượt xuống giống phong bao mở) */
+.envelope-box.is-open .landing-card {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-30px);
+    transition: all 0.6s ease;
+}
+
+/* Trạng thái ban đầu của thiệp khi nằm trong phong bì */
+#flying-card {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+/*#flying-card .invite-frame {*/
+/*    transform: translateY(140px) scale(0.92);*/
+/*    opacity: 0;*/
+/*}*/
+
+/* =========================================================
+   METEOR TRAIL
+   ========================================================= */
+
+#card-meteor-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 18;
+}
+
+.card-meteor-streak {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 90px;
+    height: 2px;
+
+    transform-origin: 100% 50%;
+
+    pointer-events: none;
+
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(212, 175, 55, 0.08) 35%,
+            rgba(255, 225, 130, 0.45) 72%,
+            rgba(255, 255, 255, 0.95) 100%
+    );
+
+    filter:
+            blur(0.5px)
+            drop-shadow(0 0 4px rgba(255, 225, 130, 0.8));
+
+    opacity: 0;
+}
+
+.card-meteor-particle {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    background: rgba(255, 225, 130, 1);
+
+    box-shadow:
+            0 0 4px rgba(255, 255, 255, 1),
+            0 0 9px rgba(255, 225, 130, 0.95),
+            0 0 18px rgba(212, 175, 55, 0.75);
+
+    opacity: 0;
+
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.card-meteor-particle.white {
+    background: rgba(255, 255, 255, 1);
+
+    box-shadow:
+            0 0 4px rgba(255, 255, 255, 1),
+            0 0 10px rgba(255, 255, 255, 0.95),
+            0 0 18px rgba(255, 225, 130, 0.65);
+}
+
+.card-meteor-particle.star {
+    width: 6px;
+    height: 6px;
+}
+
+.card-meteor-particle.star::before,
+.card-meteor-particle.star::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border-radius: 999px;
+}
+
+.card-meteor-particle.star::before {
+    width: 18px;
+    height: 1px;
+}
+
+.card-meteor-particle.star::after {
+    width: 1px;
+    height: 18px;
+}
+
+/* Flash cuối khi card tới vị trí */
+#card-meteor-flash {
+    position: fixed;
+
+    left: 50%;
+    top: 50%;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 19;
+
+    opacity: 0;
+
+    transform:
+            translate(-50%, -50%)
+            scale(0);
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(255, 255, 255, 1) 0%,
+                    rgba(255, 225, 130, 0.85) 15%,
+                    rgba(212, 175, 55, 0.35) 38%,
+                    transparent 72%
+            );
+
+    filter: blur(1px);
+
+    box-shadow:
+            0 0 25px rgba(255, 255, 255, 0.65),
+            0 0 60px rgba(212, 175, 55, 0.5),
+            0 0 100px rgba(212, 175, 55, 0.25);
+}
