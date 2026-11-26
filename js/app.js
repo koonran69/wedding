@@ -12,6 +12,7 @@ const state = {
     mainScene: null,
     cupidScene: null,
     mainCupidScene: null,
+    invitationStarfield: null,
     coverIndex: 0,
     soundOn: false,
 };
@@ -345,6 +346,9 @@ async function openInvitation() {
 
             $("#landing").classList.add("hidden");
             $("#invitation").classList.remove("hidden");
+            if (window.InvitationStarfield && !state.invitationStarfield) {
+                state.invitationStarfield = new InvitationStarfield($("#invitation-starfield"));
+            }
             document.body.classList.add("is-open");
             ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
             window.scrollTo(0, 0);

@@ -289,3 +289,196 @@ class WeddingScene {
 }
 
 window.WeddingScene = WeddingScene;
+
+class InvitationStarfield {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d", { alpha: true });
+        this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        this.running = true;
+        this.rafId = null;
+        this.starSprite = this.createStarSprite();
+        this.dotSprite = this.createDotSprite();
+
+        this.resize = this.resize.bind(this);
+        this.render = this.render.bind(this);
+        this.onVisibility = () => {
+            if (document.hidden) this.stop();
+            else if (this.running) this.start();
+        };
+
+        window.addEventListener("resize", this.resize, { passive: true });
+        document.addEventListener("visibilitychange", this.onVisibility);
+        this.resize();
+        this.start();
+    }
+
+    // Tạo sprite sao 4 cánh + hào quang vàng/trắng giống cảm hứng WeddingScene
+    createStarSprite() {
+        const size = 96;
+        const c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        const g = c.getContext("2d");
+        const half = size / 2;
+
+        const glow = g.createRadialGradient(half, half, 0, half, half, half);
+        glow.addColorStop(0, "rgba(255, 255, 255, 1)");
+        glow.addColorStop(0.22, "rgba(255, 223, 130, 0.88)");
+        glow.addColorStop(0.55, "rgba(218, 178, 86, 0.28)");
+        glow.addColorStop(1, "rgba(218, 178, 86, 0)");
+        g.fillStyle = glow;
+        g.fillRect(0, 0, size, size);
+
+        g.save();
+        g.translate(half, half);
+        g.fillStyle = "#FFFDF7";
+        g.beginPath();
+        const spikes = 4;
+        const outerR = 32;
+        const innerR = 9;
+        for (let i = 0; i < spikes * 2; i++) {
+            const r = i % 2 === 0 ? outerR : innerR;
+            const angle = (i * Math.PI) / spikes;
+            const x = Math.cos(angle) * r;
+            const y = Math.sin(angle) * r;
+            if (i === 0) g.moveTo(x, y);
+            else g.lineTo(x, y);
+        }
+        g.closePath();
+        g.fill();
+        g.restore();
+
+        return c;
+    }
+
+    // Tạo sprite hạt nhũ tròn sáng cho các hạt phụ nhỏ hơn
+    createDotSprite() {
+        const size = 48;
+        const c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        const g = c.getContext("2d");
+        const half = size / 2;
+
+        const grad = g.createRadialGradient(half, half, 0, half, half, half);
+        grad.addColorStop(0, "rgba(255, 253, 245, 1)");
+        grad.addColorStop(0.35, "rgba(240, 205, 125, 0.85)");
+        grad.addColorStop(1, "rgba(212, 175, 55, 0)");
+        g.fillStyle = grad;
+        g.fillRect(0, 0, size, size);
+
+        return c;
+    }
+
+    resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        const width = Math.max(1, window.innerWidth);
+        const height = Math.max(1, window.innerHeight);
+        const isSmall = width < 640;
+
+        this.canvas.width = Math.round(width * dpr);
+        this.canvas.height = Math.round(height * dpr);
+        this.canvas.style.width = `${width}px`;
+        this.canvas.style.height = `${height}px`;
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const count = Math.max(45, Math.round((width * height) / (isSmall ? 8500 : 6500)));
+        this.stars = Array.from({ length: count }, (_, idx) => {
+            const depth = 0.45 + Math.random() * 0.55;
+            const isSparkle = idx % 3 === 0; // ~1/3 là sao 4 cánh lớn lấp lánh
+            const baseSize = isSparkle
+                ? (isSmall ? 12 : 16) + Math.random() * (isSmall ? 10 : 16)
+                : (isSmall ? 5 : 6) + Math.random() * (isSmall ? 7 : 10);
+
+            return {
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: baseSize * (0.7 + depth * 0.4),
+                speed: (0.18 + Math.random() * 0.48) * depth,
+                driftFreq: 0.0003 + Math.random() * 0.0004,
+                driftAmp: 0.15 + Math.random() * 0.25,
+                twinkleSpeed: 0.0018 + Math.random() * 0.0022,
+                phase: Math.random() * Math.PI * 2,
+                depth,
+                isSparkle,
+                spin: Math.random() * Math.PI * 2,
+                spinSpeed: (Math.random() - 0.5) * 0.0008,
+            };
+        });
+
+        this.width = width;
+        this.height = height;
+    }
+
+    start() {
+        if (this.rafId === null && !document.hidden) {
+            this.rafId = requestAnimationFrame(this.render);
+        }
+    }
+
+    stop() {
+        if (this.rafId !== null) {
+            cancelAnimationFrame(this.rafId);
+            this.rafId = null;
+        }
+    }
+
+    render(now = 0) {
+        this.rafId = null;
+        if (!this.running || document.hidden) return;
+
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.width, this.height);
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+
+        for (const star of this.stars) {
+            if (!this.reduced) {
+                star.y += star.speed;
+                star.x += Math.sin(now * star.driftFreq + star.phase) * star.driftAmp;
+                star.spin += star.spinSpeed * 16;
+
+                const margin = star.size;
+                if (star.y > this.height + margin) {
+                    star.y = -margin;
+                    star.x = Math.random() * this.width;
+                }
+                if (star.x < -margin) star.x = this.width + margin;
+                if (star.x > this.width + margin) star.x = -margin;
+            }
+
+            const wave = (Math.sin(now * star.twinkleSpeed + star.phase) + 1) * 0.5;
+            const alpha = this.reduced
+                ? 0.75 * star.depth
+                : Math.min(1, (0.45 + wave * 0.55) * (0.65 + star.depth * 0.35));
+            const pulse = this.reduced ? 1 : 0.85 + wave * 0.3;
+            const drawSize = star.size * pulse;
+
+            ctx.globalAlpha = alpha;
+
+            if (star.isSparkle) {
+                ctx.save();
+                ctx.translate(star.x, star.y);
+                ctx.rotate(star.spin);
+                ctx.drawImage(this.starSprite, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
+                ctx.restore();
+            } else {
+                ctx.drawImage(this.dotSprite, star.x - drawSize / 2, star.y - drawSize / 2, drawSize, drawSize);
+            }
+        }
+
+        ctx.restore();
+        this.rafId = requestAnimationFrame(this.render);
+    }
+
+    dispose() {
+        this.running = false;
+        this.stop();
+        window.removeEventListener("resize", this.resize);
+        document.removeEventListener("visibilitychange", this.onVisibility);
+        this.ctx.clearRect(0, 0, this.width, this.height);
+    }
+}
+
+window.InvitationStarfield = InvitationStarfield;

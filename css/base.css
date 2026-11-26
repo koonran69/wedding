@@ -1,12 +1,12 @@
 :root {
-    --cream: #FAF7F2;
-    --ivory: #F3EDE2;
-    --blush: #E8D5CE;
-    --rose: #B88E80;
-    --gold: #9a7132;
-    --gold-deep: #9E7C3E;
-    --ink: #2B211C;
-    --ink-soft: #635248;
+    --cream: #18120F;
+    --ivory: #241B16;
+    --blush: #39291F;
+    --rose: #C8A468;
+    --gold: #E6C68A;
+    --gold-deep: #C8A468;
+    --ink: #F8F2E9;
+    --ink-soft: #D9C8B4;
 }
 
 *,
@@ -36,18 +36,18 @@ body.is-open {
 }
 
 #invitation, #invitation footer {
-    font-family: "Be Vietnam Pro", "Outfit", sans-serif;
+    font-family: "Be Vietnam Pro", sans-serif;
     font-size: 1rem;
-    line-height: 1.8;
+    line-height: 1.7;
     letter-spacing: 0.005em;
     color: var(--ink);
 }
 #invitation p, #invitation li, #invitation address { color: var(--ink-soft); }
 #invitation h1, #invitation h2, #invitation h3, #invitation strong { color: var(--ink); }
-#invitation .font-serif { font-family: "Cormorant Garamond", "Be Vietnam Pro", serif; font-size: 1.18em; line-height: 1.65; }
-#invitation .text-xs { font-size: 1rem; }
-#invitation .text-sm { font-size: 1rem; }
-#invitation .text-base { font-size: 1.08rem; }
+#invitation .font-serif { font-family: "Be Vietnam Pro", sans-serif; font-weight: 400; line-height: 1.7; }
+#invitation .text-xs { font-size: .875rem; }
+#invitation .text-sm { font-size: .9375rem; }
+#invitation .text-base { font-size: 1rem; }
 #invitation .text-gold { color: var(--gold); }
 
 img,
@@ -64,7 +64,7 @@ canvas {
     inset: 0;
     z-index: 80;
     opacity: 0.035;
-    mix-blend-mode: multiply;
+    mix-blend-mode: screen;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
 }
 
@@ -76,9 +76,11 @@ canvas {
 }
 
 .script-section {
-    font-family: "Great Vibes", cursive;
+    font-family: "Playfair Display", serif;
     font-size: clamp(2.3rem, 9vw, 4rem);
     line-height: 1.15;
+    font-weight: 500;
+    color: var(--gold);
 }
 
 .script-name {
@@ -114,11 +116,11 @@ canvas {
 
 .invite-frame {
     background:
-            linear-gradient(var(--cream), var(--cream)) padding-box,
-            linear-gradient(135deg, #EAD4B5, #C5A059, #F5EBE1, #9E7C3E) border-box;
+            linear-gradient(var(--ivory), var(--ivory)) padding-box,
+            linear-gradient(135deg, #C8A468, #E6C68A, #725631, #C8A468) border-box;
     border: 1px solid transparent;
     box-shadow:
-            0 25px 60px -30px rgba(43, 33, 28, 0.3),
+            0 25px 60px -30px rgba(0, 0, 0, 0.75),
             inset 0 0 60px rgba(197, 160, 89, 0.06);
 }
 
@@ -128,8 +130,8 @@ canvas {
     border: 1px solid rgba(197, 160, 89, 0.35);
     border-radius: 1.5rem;
     box-shadow:
-            0 20px 45px -20px rgba(43, 33, 28, 0.35),
-            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            0 20px 45px -20px rgba(0, 0, 0, 0.72),
+            inset 0 1px 0 rgba(230, 198, 138, 0.18);
 }
 
 .reveal-line {
@@ -139,7 +141,7 @@ canvas {
 
 .sound-btn {
     backdrop-filter: blur(12px);
-    background: rgba(250, 247, 242, 0.85);
+    background: rgba(36, 27, 22, 0.92);
     border: 1px solid rgba(197, 160, 89, 0.4);
     min-width: 48px;
     min-height: 48px;
@@ -149,7 +151,8 @@ canvas {
     position: relative;
     overflow: hidden;
     background: linear-gradient(180deg, #D4B375, #B08844);
-    color: #FFFFFF;
+    color: #f1eaea;
+    font-weight: bold;
     min-height: 52px;
     touch-action: manipulation;
     box-shadow:
@@ -210,7 +213,7 @@ canvas {
 }
 
 @media (min-width: 640px) {
-    #invitation, #invitation footer { font-size: 1.08rem; line-height: 1.85; }
+    #invitation, #invitation footer { font-size: 1.05rem; line-height: 1.7; }
     .kicker {
         letter-spacing: 0.38em;
         font-size: 15px
@@ -219,6 +222,24 @@ canvas {
         border-radius: 1.75rem;
     }
 }
+
+/* Dark luxury surfaces and invitation starfield */
+#invitation { background: transparent !important; color: var(--ink); isolation: isolate; }
+#invitation > section, #invitation > footer { position: relative; z-index: 1; background-color: transparent; }
+#invitation #details, #invitation #map, #invitation #gallery { background-color: rgba(36, 27, 22, .72) !important; }
+#invitation #opening { background: radial-gradient(ellipse at center, rgba(58, 40, 29, .52), rgba(24, 18, 15, .18) 72%); }
+#invitation .invite-frame { background: linear-gradient(var(--ivory), var(--ivory)) padding-box, linear-gradient(135deg, #C8A468, #E6C68A, #725631, #C8A468) border-box; }
+#invitation .bg-ivory\/80, #invitation .bg-ivory\/70 { background-color: rgba(45, 33, 25, .92); }
+#invitation .bg-cream\/98 { background-color: rgba(36, 27, 22, .98); }
+#invitation .text-ink, .text-ink { color: var(--ink); }
+#invitation .text-ink-soft, .text-ink-soft { color: var(--ink-soft); }
+#invitation .text-gold, .text-gold { color: var(--gold); }
+#invitation .bg-white { background-color: #fff !important; }
+#invitation-starfield { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; opacity: 1; }
+.landing-card { background: var(--ivory); }
+.cal-cell { font-family: "Be Vietnam Pro", sans-serif; color: var(--ink-soft); }
+.coverflow-item { background: #241B16; box-shadow: 0 18px 40px -18px rgba(0,0,0,.75); }
+.pack-letter { background: var(--ivory); color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
     .btn-gold::after {
